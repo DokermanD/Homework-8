@@ -8,11 +8,29 @@ namespace Homework_8
         static void Main(string[] args)
         {
             Employees userEmployee = null;
+            DictionaryEmployees dictionary = new DictionaryEmployees();
+
 
             while (true)
             {
-                //Получение данных от пользователя и построение бинарного дерева
-                userEmployee = GetConsoleUserData(userEmployee);
+                while (true)
+                {
+                    Console.WriteLine("Программа работает в двух режимах.\nВведите 1 для ручного ввода сотрудников.\nВведите 0 для автоматического заполнения.");
+                    var check = int.TryParse(Console.ReadLine(), out int reghim);
+
+                    if (check && reghim == 0)
+                    {
+                        //Получение данных от пользователя и построение бинарного дерева (автоматический ввод)
+                        userEmployee = GetConsoleUserDataAuto(userEmployee);
+                        break;
+                    }
+                    else if (check && reghim == 1)
+                    {
+                        //Получение данных от пользователя и построение бинарного дерева (ручной ввод)
+                        userEmployee = GetConsoleUserData(userEmployee);
+                        break;
+                    }
+                }
 
                 //Сортировка и вывод в консоль по возростанию сотрудников + зп
                 Console.WriteLine("-- Сортировка --");
@@ -58,7 +76,7 @@ namespace Homework_8
                 return inputMoney;
             }
 
-            //Метод для получения из консоли Имени и зарплаты сотрудника
+            //Метод для получения из консоли Имени и зарплаты сотрудника в ручном режиме
             Employees GetConsoleUserData(Employees userEmployee)
             {
                 Console.WriteLine("-- Добавление сотрудников --\nДля перехода к сортировке введите пустое значение в строке (имя сотрудника)\n");
@@ -96,6 +114,38 @@ namespace Homework_8
 
                     }
                 }
+                return userEmployee;
+            }
+
+            //Метод для получения из консоли Имени и зарплаты сотрудника в ручном режиме
+            Employees GetConsoleUserDataAuto(Employees userEmployee)
+            {
+                Console.WriteLine("-- Добавление сотрудников авто --");
+
+                foreach (var item in dictionary.employeesDict)
+                {
+                    Console.WriteLine("Введите имя сотрудника: " + item.Key);
+                    Console.WriteLine("Введите зарплату сотрудника: " + item.Value);
+                    Console.WriteLine();
+
+                    if (userEmployee == null)
+                    {
+                        userEmployee = new Employees()
+                        {
+                            Money = item.Value,
+                            Name = item.Key
+                        };
+                    }
+                    else
+                    {
+                        AddNewEmployee(userEmployee, new Employees
+                        {
+                            Money = item.Value,
+                            Name = item.Key
+                        });
+                    }
+                }
+                                
                 return userEmployee;
             }
 
