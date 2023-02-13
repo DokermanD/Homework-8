@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Homework_8
 {
-    public class Employees
+    public class Employee
     {       
         //Имя сотрудника
         public string Name { get; set; }
 
         //Заработная плата сотрудника
-        public int Money { get; set; }
+        public int Salary { get; set; }
 
         //Левая ветка
-        public Employees LeftBranch { get; set; }
+        public Employee LeftBranch { get; set; }
 
         //Правая ветка
-        public Employees RightBranch { get; set; }
+        public Employee RightBranch { get; set; }
     }
 }

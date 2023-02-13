@@ -7,7 +7,7 @@ namespace Homework_8
     {
         static void Main(string[] args)
         {
-            Employees userEmployee = null;
+            Employee userEmployee = null;
             DictionaryEmployees dictionary = new DictionaryEmployees();
 
 
@@ -16,15 +16,15 @@ namespace Homework_8
                 while (true)
                 {
                     Console.WriteLine("Программа работает в двух режимах.\nВведите 1 для ручного ввода сотрудников.\nВведите 0 для автоматического заполнения.");
-                    var check = int.TryParse(Console.ReadLine(), out int reghim);
+                    var check = int.TryParse(Console.ReadLine(), out int mode);
 
-                    if (check && reghim == 0)
+                    if (check && mode == 0)
                     {
                         //Получение данных от пользователя и построение бинарного дерева (автоматический ввод)
                         userEmployee = GetConsoleUserDataAuto(userEmployee);
                         break;
                     }
-                    else if (check && reghim == 1)
+                    else if (check && mode == 1)
                     {
                         //Получение данных от пользователя и построение бинарного дерева (ручной ввод)
                         userEmployee = GetConsoleUserData(userEmployee);
@@ -42,7 +42,7 @@ namespace Homework_8
                 {
                     //Поиск сотрудника по з/п
                     Console.WriteLine("Введите зарплату сотрудника для поиска: ");
-                    var rezalt = int.TryParse(Console.ReadLine(), out int inputMoney);
+                    var result = int.TryParse(Console.ReadLine(), out int inputMoney);
 
                     SearchEmployee(userEmployee, inputMoney);
 
@@ -77,7 +77,7 @@ namespace Homework_8
             }
 
             //Метод для получения из консоли Имени и зарплаты сотрудника в ручном режиме
-            Employees GetConsoleUserData(Employees userEmployee)
+            Employee GetConsoleUserData(Employee userEmployee)
             {
                 Console.WriteLine("-- Добавление сотрудников --\nДля перехода к сортировке введите пустое значение в строке (имя сотрудника)\n");
                 
@@ -97,17 +97,17 @@ namespace Homework_8
                     {
                         if (userEmployee == null)
                         {
-                            userEmployee = new Employees()
+                            userEmployee = new Employee()
                             {
-                                Money = money,
+                                Salary = money,
                                 Name = name
                             };
                         }
                         else
                         {
-                            AddNewEmployee(userEmployee, new Employees
+                            AddNewEmployee(userEmployee, new Employee
                             {
-                                Money = money,
+                                Salary = money,
                                 Name = name
                             });
                         }
@@ -118,7 +118,7 @@ namespace Homework_8
             }
 
             //Метод для получения из консоли Имени и зарплаты сотрудника в ручном режиме
-            Employees GetConsoleUserDataAuto(Employees userEmployee)
+            Employee GetConsoleUserDataAuto(Employee еmployee)
             {
                 Console.WriteLine("-- Добавление сотрудников авто --");
 
@@ -128,64 +128,64 @@ namespace Homework_8
                     Console.WriteLine("Введите зарплату сотрудника: " + item.Value);
                     Console.WriteLine();
 
-                    if (userEmployee == null)
+                    if (еmployee == null)
                     {
-                        userEmployee = new Employees()
+                        еmployee = new Employee()
                         {
-                            Money = item.Value,
+                            Salary = item.Value,
                             Name = item.Key
                         };
                     }
                     else
                     {
-                        AddNewEmployee(userEmployee, new Employees
+                        AddNewEmployee(еmployee, new Employee
                         {
-                            Money = item.Value,
+                            Salary = item.Value,
                             Name = item.Key
                         });
                     }
                 }
                                 
-                return userEmployee;
+                return еmployee;
             }
 
             //Метод добавления новых объектов и построения бинарного дерева
-            void AddNewEmployee(Employees userEmployee, Employees addUser)
+            void AddNewEmployee(Employee rootNode, Employee childNode)
             {
-                if (addUser.Money < userEmployee.Money)
+                if (childNode.Salary < rootNode.Salary)
                 {
                     //Идёс в левую ветку
-                    if (userEmployee.LeftBranch != null)
+                    if (rootNode.LeftBranch != null)
                     {
-                        AddNewEmployee(userEmployee.LeftBranch, addUser);
+                        AddNewEmployee(rootNode.LeftBranch, childNode);
                     }
                     else
                     {
-                        userEmployee.LeftBranch = addUser;
+                        rootNode.LeftBranch = childNode;
                     }
                 }
                 else
                 {
                     //Идём в правую ветку
-                    if (userEmployee.RightBranch != null)
+                    if (rootNode.RightBranch != null)
                     {
-                        AddNewEmployee(userEmployee.RightBranch, addUser);
+                        AddNewEmployee(rootNode.RightBranch, childNode);
                     }
                     else
                     {
-                        userEmployee.RightBranch = addUser;
+                        rootNode.RightBranch = childNode;
                     }
                 }
             }
 
             //Метод сортировки сотрудников по возростанию по зп
-            void SortingEmployees(Employees userEmployee)
+            void SortingEmployees(Employee userEmployee)
             {
                 if (userEmployee.LeftBranch != null)
                 {
                     SortingEmployees(userEmployee.LeftBranch);
                 }
-                Console.WriteLine($"{userEmployee.Name} - {userEmployee.Money}");
+                Console.WriteLine($"{userEmployee.Name} - {userEmployee.Salary}");
 
                 if (userEmployee.RightBranch != null)
                 {
@@ -194,15 +194,15 @@ namespace Homework_8
             }
 
             //Метод поиска сотрудника по зп
-            void SearchEmployee(Employees userEmployee, int inputMoney)
+            void SearchEmployee(Employee userEmployee, int inputMoney)
             {
                 //Поиск
-                if (userEmployee.Money == inputMoney)
+                if (userEmployee.Salary == inputMoney)
                 {
                     Console.Write("Найден сотрудник - " + userEmployee.Name);
                     Console.WriteLine();
                 }
-                else if (userEmployee.Money < inputMoney)
+                else if (userEmployee.Salary < inputMoney)
                 {
                     if (userEmployee.RightBranch != null)
                     {
@@ -214,7 +214,7 @@ namespace Homework_8
                         Console.WriteLine();
                     }
                 }
-                else if (userEmployee.Money > inputMoney)
+                else if (userEmployee.Salary > inputMoney)
                 {
                     if (userEmployee.LeftBranch != null)
                     {
